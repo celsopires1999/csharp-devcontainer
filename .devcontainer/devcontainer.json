@@ -6,9 +6,8 @@
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
-		"../docker-compose.yml",
-		"../docker-compose.override.yml",
-		"docker-compose.yml"
+		"docker-compose.yml",
+		"docker-compose.override.yml"
 	],
 
 	// The 'service' property is the name of the service for the container that VS Code should
@@ -17,7 +16,7 @@
 
 	// The optional 'workspaceFolder' property is the path VS Code should open by default when
 	// connected. This is typically a file mount in .devcontainer/docker-compose.yml
-	"workspaceFolder": "/home/developer/app",
+	"workspaceFolder": "/workspace",
 	"features": {
 		"ghcr.io/devcontainers/features/common-utils:2": {},
 		"ghcr.io/devcontainers/features/git:1": {},
@@ -27,7 +26,8 @@
 			"omzPlugins": "https://github.com/z-shell/F-Sy-H https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-completions"
 		}
 	},
-	"onCreateCommand": "mkdir -p /home/developer/.vscode-server",
+	"onCreateCommand": "chown -R developer:developer /workspace /home/developer/.vscode-server",
+	"postCreateCommand": "dotnet tool install --global dotnet-ef || true",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},

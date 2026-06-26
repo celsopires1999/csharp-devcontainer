@@ -1,29 +1,19 @@
 services:
-  # Update this to the name of the service you want to work with in your docker-compose.yml file
   app:
-    # Uncomment if you want to override the service's Dockerfile to one in the .devcontainer 
-    # folder. Note that the path of the Dockerfile and context is relative to the *primary* 
-    # docker-compose.yml file (the first in the devcontainer.json "dockerComposeFile"
-    # array). The sample below assumes your primary file is in the root of your project.
-    #
-    # build:
-    #   context: .
-    #   dockerfile: .devcontainer/Dockerfile
-
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.dev
+      args:
+        - USER_UID=${UID:-1000}
+        - USER_GID=${GID:-1000}
+        - DOCKER_GROUP_ID=${DOCKER_GROUP_ID:-999}
     volumes:
-      # Update this to wherever you want VS Code to mount the folder of your project
-      - .:/home/developer/app:cached
-      # Persist VS Code extensions across container rebuilds
+      - ..:/workspace:cached
+      - /var/run/docker.sock:/var/run/docker.sock
       - vscode-server:/home/developer/.vscode-server
-
-    # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
-    # cap_add:
-    #   - SYS_PTRACE
-    # security_opt:
-    #   - seccomp:unconfined
-
-    # Overrides default command so things don't shut down after the process ends.
-    # command: sleep infinity
+    tty: true
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 volumes:
   vscode-server:

@@ -26,7 +26,7 @@ RUN apt-get update && \
     socat && \
     rm -rf /var/lib/apt/lists/*
 
-# Install just command runner and shell completions (before switching to non-root user)
+# Install just command runner and shell completions
 RUN curl -fsSL https://github.com/casey/just/releases/download/1.51.0/just-1.51.0-x86_64-unknown-linux-musl.tar.gz -o /tmp/just.tar.gz && \
     tar -xzf /tmp/just.tar.gz -C /usr/local/bin just && \
     rm /tmp/just.tar.gz && \
@@ -44,12 +44,6 @@ RUN groupadd -f -g ${DOCKER_GROUP_ID} docker && \
 RUN mkdir -p /home/developer/.vscode-server && \
     chown -R developer:developer /home/developer/.vscode-server
 
-USER developer
-
-WORKDIR /home/developer/app
-
-# Ensure dotnet global tools are on PATH and install dotnet-ef for migrations
 ENV PATH="/home/developer/.dotnet/tools:${PATH}"
-RUN dotnet tool install --global dotnet-ef || true
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]
